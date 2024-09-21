@@ -1,4 +1,3 @@
-'use client'
 import Image from "next/image";
 import { Toaster } from "react-hot-toast";
 import { SlashIcon } from "@radix-ui/react-icons"
