@@ -6,7 +6,7 @@ app.use(urlencoded({extended:true}))
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin:"https://inter-project02.vercel.app",
+    origin:process.env.ORIGIN,
     credentials:true
 }))
 
