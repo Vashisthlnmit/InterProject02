@@ -1,10 +1,9 @@
-'use client'
-import React, { useEffect, useState } from 'react';
+'use client';
+import React, { useEffect, useState, useCallback } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { useDispatch } from "react-redux";
-import { GetAllTask } from '@/redux/TaskReducer';
+import { useDispatch } from 'react-redux';
+import { GetAllTask, UpdatedTask } from '@/redux/TaskReducer';
 import toast, { Toaster } from 'react-hot-toast';
-import { UpdatedTask } from '@/redux/TaskReducer';
 
 const KanbanBoard = () => {
   const dispatch = useDispatch();
@@ -14,23 +13,23 @@ const KanbanBoard = () => {
     completed: [],
   });
 
-  const fetchTasks = async () => {
+  const fetchTasks = useCallback(async () => {
     try {
-      const response = await dispatch(GetAllTask()); // Update with your API endpoint
+      const response = await dispatch(GetAllTask());
       const data = response.payload.data.data;
-      const todo = data.filter(task => task?.Status == 'To Do');
-      const inProgress = data.filter(task => task?.Status == 'In Progress');
-      const completed = data.filter(task => task.Status == 'Completed');
+      const todo = data.filter(task => task?.Status === 'To Do');
+      const inProgress = data.filter(task => task?.Status === 'In Progress');
+      const completed = data.filter(task => task.Status === 'Completed');
 
       setTasks({ todo, inProgress, completed });
     } catch (err) {
       toast.error("Failed to fetch tasks");
     }
-  };
+  }, [dispatch]); // Add dispatch as a dependency
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [fetchTasks]); // Include fetchTasks in the dependency array
 
   const handleDragEnd = async (result) => {
     const { source, destination } = result;
@@ -83,23 +82,17 @@ const KanbanBoard = () => {
 
   return (
     <>
-    <div className='overflow-hidden bg-custom-image bg-cover bg-center h-screen'>
-      <h1 className='text-4xl m-5  font-extrabold font-sans text-center'>Kanban Board Screen</h1>
-      <DragDropContext onDragEnd={handleDragEnd} className="my-2">
-        {/* Responsive grid: 1 column on small screens, 3 columns on medium+ screens */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
-          {/* To Do Column */}
-          <Column droppableId="todo" tasks={tasks.todo} title="To Do" />
-
-          {/* In Progress Column */}
-          <Column droppableId="inProgress" tasks={tasks.inProgress} title="In Progress" />
-
-          {/* Completed Column */}
-          <Column droppableId="completed" tasks={tasks.completed} title="Completed" />
-        </div>
-        <Toaster />
-      </DragDropContext>
-    </div>
+      <div className='overflow-hidden bg-custom-image bg-cover bg-center h-screen'>
+        <h1 className='text-4xl m-5 font-extrabold font-sans text-center'>Kanban Board Screen</h1>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
+            <Column droppableId="todo" tasks={tasks.todo} title="To Do" />
+            <Column droppableId="inProgress" tasks={tasks.inProgress} title="In Progress" />
+            <Column droppableId="completed" tasks={tasks.completed} title="Completed" />
+          </div>
+          <Toaster />
+        </DragDropContext>
+      </div>
     </>
   );
 };
@@ -111,7 +104,7 @@ const Column = ({ droppableId, tasks, title }) => {
         <div
           {...provided.droppableProps}
           ref={provided.innerRef}
-          className="p-4 bg-gray-700 opacity-60 rounded-lg min-h-[300px] mx-4" // Ensure minimum height for columns
+          className="p-4 bg-gray-700 opacity-60 rounded-lg min-h-[300px] mx-4"
         >
           <h2 className="font-bold text-lg mb-2">{title}</h2>
           {tasks.map((task, index) => (
