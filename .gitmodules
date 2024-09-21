@@ -1,0 +1,3 @@
+[submodule "Fronted/inter_project"]
+	path = Fronted/inter_project
+	url = https://github.com/Vashisthlnmit/InterProject.git
