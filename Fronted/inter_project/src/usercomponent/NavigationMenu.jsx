@@ -65,11 +65,7 @@ const Navbar = () => {
           <div className="flex space-x-4">
             <button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
-              onClick={() => {
-                console.log("pushme");
-                router.push('/signin')
-                
-              }}
+              onClick={()=>router.push('/signin')}
             >
               Sign In
             </button>

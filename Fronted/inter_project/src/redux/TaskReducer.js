@@ -4,7 +4,7 @@ import toast from "react-hot-toast"
 export const AddTask=createAsyncThunk('/addtask',async(data)=>{
     console.log(data);
     try{
-     const response=axiosInstance.post('task/addTask',data)
+     const response=axiosInstance.post('/api/v1/task/addTask',data)
      toast.promise(response,{
         loading:"wait creating the task",
         success: "your task has created successfully",
@@ -23,7 +23,7 @@ export const AddTask=createAsyncThunk('/addtask',async(data)=>{
 })
 export const GetAllTask=createAsyncThunk('/getalltask',async()=>{
     try{
-     const response=axiosInstance.get('task/getallTask')
+     const response=axiosInstance.get('/api/v1/task/getallTask')
      toast.promise(response,{
         loading:"wait loading all your  task",
         success: "your task has been fetched successfully successfully",
@@ -43,7 +43,7 @@ export const GetAllTask=createAsyncThunk('/getalltask',async()=>{
 export const UpdatedTask=createAsyncThunk('/updatetask',async(data)=>{
     console.log(data);
     try{
-     const response=axiosInstance.patch(`task/UpdateTask/${data.taskid}`,data)
+     const response=axiosInstance.patch(`/api/v1/task/UpdateTask/${data.taskid}`,data)
      toast.promise(response,{
         loading:"wait updating the task",
         success: "your task has updated  successfully",
@@ -63,7 +63,7 @@ export const UpdatedTask=createAsyncThunk('/updatetask',async(data)=>{
 export const DeleteTask=createAsyncThunk('/deletetask',async(data)=>{
     console.log(data);
     try{
-     const response=axiosInstance.delete(`task/DeleteTask/${data}`)
+     const response=axiosInstance.delete(`/api/v1/task/DeleteTask/${data}`)
      toast.promise(response,{
         loading:"wait deleting your task",
         success: "your task has deleted successfully",
